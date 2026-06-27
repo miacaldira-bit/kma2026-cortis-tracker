@@ -24,7 +24,12 @@ const session2 = {
 
 async function loadVotes() {
 
-    const response = await fetch("data.json?t=" + Date.now());
+    const response = await fetch(
+    "https://my1pick.s3.ap-northeast-2.amazonaws.com/kmc/prd-Final-EarlyGlobalRisingStar.json?t=" + Date.now(),
+    {
+        cache: "no-store"
+    }
+);
     const data = await response.json();
 
     // Get live final voting
