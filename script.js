@@ -23,12 +23,23 @@ const session2 = {
 =========================================== */
 
 async function loadVotes() {
+    let response;
 
-const response = await fetch(
-  "https://kma-proxy.miacaldira.workers.dev?t=" + Date.now()
-);
+    try {
+        response = await fetch(
+            "https://kma-proxy.miacaldira.workers.dev?t=" + Date.now()
+        );
+
+        if (!response.ok) throw new Error("Worker failed");
+    } catch (e) {
+        console.log("Using local backup data.json");
+        response = await fetch("data.json?t=" + Date.now());
+    }
 
     const data = await response.json();
+
+    // rest of your code...
+}
 
    
 
