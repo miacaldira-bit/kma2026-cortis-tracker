@@ -27,14 +27,20 @@ jobs:
             -o data.json
 
       - name: Verify downloaded data
-        run: |
-          echo "=== Campaign ==="
-          grep '"campaign_idx"' data.json
+  run: |
+    echo "===== Downloaded CORTIS data ====="
 
-          echo ""
-          echo "=== Vote totals ==="
-          grep -o '"total_vote_count":[0-9]*' data.json | head -15
+    python3 << 'EOF'
+    import json
 
+    with open("data.json", encoding="utf-8") as f:
+        data = json.load(f)
+
+    for group in data["list"]:
+        if group["name2"] == "CORTIS":
+            print(group)
+            break
+    EOF
       - name: Commit updated data
         run: |
           git config user.name "github-actions"
