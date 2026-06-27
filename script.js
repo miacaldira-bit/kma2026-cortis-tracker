@@ -23,6 +23,7 @@ const session2 = {
 =========================================== */
 
 async function loadVotes() {
+
     let response;
 
     try {
@@ -30,34 +31,44 @@ async function loadVotes() {
             "https://kma-proxy.miacaldira.workers.dev?t=" + Date.now()
         );
 
-        if (!response.ok) throw new Error("Worker failed");
-    } catch (e) {
-        console.log("Using local backup data.json");
-        response = await fetch("data.json?t=" + Date.now());
+        if (!response.ok) {
+            throw new Error("Worker unavailable");
+        }
+
+        console.log("Loaded from Cloudflare Worker");
+
+    } catch (err) {
+
+        console.warn("Worker failed, using local backup.");
+
+        response = await fetch(
+            "data.json?t=" + Date.now()
+        );
     }
 
     const data = await response.json();
 
-    // rest of your code...
-}
+    /* ===========================
+       Get Final Voting
+    =========================== */
 
-   
-
-    // Get live final voting
     const finalVoting = {};
 
     data.list.forEach(group => {
         finalVoting[group.name2] = group.total_vote_count;
     });
 
-    // Build overall table
+    /* ===========================
+       Build Overall Scores
+    =========================== */
+
     const overall = [];
 
     ["CORTIS", "LNGSHOT", "ALPHA DRIVE ONE"].forEach(name => {
 
         const s1 = session1[name];
         const s2 = session2[name];
-        const live = finalVoting[name];
+        const live = finalVoting[name] || 0;
 
         overall.push({
             name,
@@ -69,10 +80,8 @@ async function loadVotes() {
 
     });
 
-    // Sort Overall
     overall.sort((a, b) => b.total - a.total);
 
-    // Sort Live
     const liveRanking = [...overall].sort((a, b) => b.final - a.final);
 
     const cortis = overall.find(x => x.name === "CORTIS");
@@ -85,7 +94,9 @@ async function loadVotes() {
 
     const leader = overall[0];
 
-    // Update Dashboard
+    /* ===========================
+       Dashboard
+    =========================== */
 
     document.getElementById("overallTotal").textContent =
         cortis.total.toLocaleString();
@@ -114,7 +125,6 @@ async function loadVotes() {
     if (overallRank === 1) {
 
         const second = overall[1];
-
         const lead = cortis.total - second.total;
 
         document.getElementById("gap").textContent =
@@ -158,7 +168,5 @@ async function loadVotes() {
 
 loadVotes();
 
-// Refresh dashboard every minute so it picks up
-// the new data.json after GitHub updates it.
-
+// Refresh every minute
 setInterval(loadVotes, 60000);
