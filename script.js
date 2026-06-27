@@ -1,176 +1,148 @@
-/* ============================================
+/* ===========================================
    SESSION 1 (FIXED)
-============================================ */
+=========================================== */
 
 const session1 = {
     "ALPHA DRIVE ONE": 249408,
-    "AHOF": 140022,
-    "CORTIS": 106474,
     "LNGSHOT": 94346,
-    "KickFlip": 66629,
-    "hrtz.wav": 9915
+    "CORTIS": 106474
 };
 
-/* ============================================
+/* ===========================================
    SESSION 2 (FIXED)
-============================================ */
+=========================================== */
 
 const session2 = {
     "ALPHA DRIVE ONE": 401141,
     "LNGSHOT": 388690,
-    "CORTIS": 99602,
-    "KickFlip": 66629,
-    "hrtz.wav": 9915,
-    "AHOF": 0
+    "CORTIS": 99602
 };
 
-/* ============================================
-   FINAL VOTING (UPDATE EVERY 10 MINUTES)
-============================================ */
+/* ===========================================
+   LOAD LIVE DATA
+=========================================== */
 
-const finalVoting = {};
+async function loadVotes() {
 
-data.list.forEach(group => {
+    const response = await fetch("data.json?t=" + Date.now());
+    const data = await response.json();
 
-    finalVoting[group.name2] = group.total_vote_count;
+    // Get live final voting
+    const finalVoting = {};
 
-});
-
-/* ============================================
-   BUILD OVERALL TABLE
-============================================ */
-
-const overall = [];
-
-const groups = new Set([
-    ...Object.keys(session1),
-    ...Object.keys(session2),
-    ...Object.keys(finalVoting)
-]);
-
-groups.forEach(name => {
-
-    const s1 = session1[name] || 0;
-    const s2 = session2[name] || 0;
-    const fv = finalVoting[name] || 0;
-
-    overall.push({
-        name: name,
-        session1: s1,
-        session2: s2,
-        final: fv,
-        total: s1 + s2 + fv
+    data.list.forEach(group => {
+        finalVoting[group.name2] = group.total_vote_count;
     });
 
-});
+    // Build overall table
+    const overall = [];
 
-/* ============================================
-   SORT OVERALL
-============================================ */
+    ["CORTIS", "LNGSHOT", "ALPHA DRIVE ONE"].forEach(name => {
 
-overall.sort((a, b) => b.total - a.total);
+        const s1 = session1[name];
+        const s2 = session2[name];
+        const live = finalVoting[name];
 
-/* ============================================
-   FINAL VOTING RANKING
-============================================ */
+        overall.push({
+            name,
+            session1: s1,
+            session2: s2,
+            final: live,
+            total: s1 + s2 + live
+        });
 
-const live = [...overall]
-    .sort((a, b) => b.final - a.final);
+    });
 
-/* ============================================
-   FIND CORTIS
-============================================ */
+    // Sort Overall
+    overall.sort((a, b) => b.total - a.total);
 
-const cortis = overall.find(x => x.name === "CORTIS");
+    // Sort Live
+    const liveRanking = [...overall].sort((a, b) => b.final - a.final);
 
-const overallRank =
-    overall.findIndex(x => x.name === "CORTIS") + 1;
+    const cortis = overall.find(x => x.name === "CORTIS");
 
-const liveRank =
-    live.findIndex(x => x.name === "CORTIS") + 1;
+    const overallRank =
+        overall.findIndex(x => x.name === "CORTIS") + 1;
 
-const leader = overall[0];
+    const liveRank =
+        liveRanking.findIndex(x => x.name === "CORTIS") + 1;
 
-/* ============================================
-   UPDATE PAGE
-============================================ */
+    const leader = overall[0];
 
-document.getElementById("overallTotal").textContent =
-    cortis.total.toLocaleString();
+    // Update Dashboard
 
-document.getElementById("overallRank").textContent =
-    "#" + overallRank;
+    document.getElementById("overallTotal").textContent =
+        cortis.total.toLocaleString();
 
-document.getElementById("liveRank").textContent =
-    "#" + liveRank;
+    document.getElementById("overallRank").textContent =
+        "#" + overallRank;
 
-document.getElementById("session1").textContent =
-    cortis.session1.toLocaleString();
+    document.getElementById("liveRank").textContent =
+        "#" + liveRank;
 
-document.getElementById("session2").textContent =
-    cortis.session2.toLocaleString();
+    document.getElementById("session1").textContent =
+        cortis.session1.toLocaleString();
 
-document.getElementById("final").textContent =
-    cortis.final.toLocaleString();
+    document.getElementById("session2").textContent =
+        cortis.session2.toLocaleString();
 
-document.getElementById("overallLeader").textContent =
-    leader.name;
+    document.getElementById("final").textContent =
+        cortis.final.toLocaleString();
 
-document.getElementById("leaderVotes").textContent =
-    leader.total.toLocaleString();
+    document.getElementById("overallLeader").textContent =
+        leader.name;
 
-/* ============================================
-   GAP TO OVERALL #1
-============================================ */
+    document.getElementById("leaderVotes").textContent =
+        leader.total.toLocaleString();
 
-if (overallRank === 1) {
+    if (overallRank === 1) {
 
-    const second = overall[1];
+        const second = overall[1];
 
-    const lead =
-        cortis.total - second.total;
+        const lead = cortis.total - second.total;
 
-    document.getElementById("gapTitle").textContent =
-        "🏆 OVERALL LEAD";
+        document.getElementById("gap").textContent =
+            lead.toLocaleString();
 
-    document.getElementById("gap").textContent =
-        lead.toLocaleString();
+        document.getElementById("gapTitle").textContent =
+            "Overall Lead";
 
-    document.getElementById("gapGoal").textContent =
-        lead.toLocaleString() + " votes";
+        document.getElementById("gapGoal").textContent =
+            lead.toLocaleString() + " votes";
 
-    document.getElementById("status").textContent =
-        "🟢 CORTIS is leading overall!";
+        document.getElementById("status").textContent =
+            "🟢 CORTIS is leading overall";
 
-} else {
+    } else {
 
-    const gap =
-        leader.total - cortis.total;
+        const gap = leader.total - cortis.total;
 
-    document.getElementById("gapTitle").textContent =
-        "Votes Needed";
+        document.getElementById("gap").textContent =
+            gap.toLocaleString();
 
-    document.getElementById("gap").textContent =
-        gap.toLocaleString();
+        document.getElementById("gapTitle").textContent =
+            "Votes Needed";
 
-    document.getElementById("gapGoal").textContent =
-        gap.toLocaleString() + " votes";
+        document.getElementById("gapGoal").textContent =
+            gap.toLocaleString() + " votes";
 
-    document.getElementById("status").textContent =
-        "🔥 Keep voting to catch " + leader.name;
+        document.getElementById("status").textContent =
+            "🔥 Catch " + leader.name;
+
+    }
+
+    document.getElementById("updated").textContent =
+        "Updated: " + new Date().toLocaleString();
 
 }
 
-/* ============================================
-   LAST UPDATED
-============================================ */
-
-const now = new Date();
-
-document.getElementById("updated").textContent =
-    "Updated: " + now.toLocaleString();
-
+/* ===========================================
+   START
+=========================================== */
 
 loadVotes();
 
-setInterval(loadVotes,600000);
+// Refresh dashboard every minute so it picks up
+// the new data.json after GitHub updates it.
+
+setInterval(loadVotes, 60000);
