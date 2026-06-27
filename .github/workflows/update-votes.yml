@@ -3,7 +3,6 @@ name: Update KMA Votes
 on:
   schedule:
     - cron: "*/10 * * * *"
-
   workflow_dispatch:
 
 permissions:
@@ -27,20 +26,23 @@ jobs:
             -o data.json
 
       - name: Verify downloaded data
-  run: |
-    echo "===== Downloaded CORTIS data ====="
+        run: |
+          python3 << 'EOF'
+          import json
 
-    python3 << 'EOF'
-    import json
+          with open("data.json", encoding="utf-8") as f:
+              data = json.load(f)
 
-    with open("data.json", encoding="utf-8") as f:
-        data = json.load(f)
+          print("=" * 60)
+          print("Downloaded CORTIS data")
+          print("=" * 60)
 
-    for group in data["list"]:
-        if group["name2"] == "CORTIS":
-            print(group)
-            break
-    EOF
+          for group in data["list"]:
+              if group["name2"] == "CORTIS":
+                  print(json.dumps(group, indent=2, ensure_ascii=False))
+                  break
+          EOF
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions"
@@ -48,6 +50,9 @@ jobs:
 
           git add data.json
 
-          git diff --cached --quiet || git commit -m "Update votes"
-
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Update votes"
+            git push
+          fi
