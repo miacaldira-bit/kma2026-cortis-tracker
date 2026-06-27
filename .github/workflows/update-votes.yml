@@ -11,23 +11,34 @@ permissions:
 
 jobs:
   update:
-
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
-
-      - name: Download JSON
+      - name: Download latest JSON
         run: |
           curl -L \
-          "https://my1pick.s3.ap-northeast-2.amazonaws.com/kmc/prd-Final-EarlyGlobalRisingStar.json" \
-          -o data.json
+            -H "Cache-Control: no-cache, no-store" \
+            -H "Pragma: no-cache" \
+            -H "Expires: 0" \
+            "https://my1pick.s3.ap-northeast-2.amazonaws.com/kmc/prd-Final-EarlyGlobalRisingStar.json?nocache=$(date +%s)" \
+            -o data.json
 
-      - name: Commit
+      - name: Verify downloaded data
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          echo "=== Campaign ==="
+          grep '"campaign_idx"' data.json
+
+          echo ""
+          echo "=== Vote totals ==="
+          grep -o '"total_vote_count":[0-9]*' data.json | head -15
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
           git add data.json
 
