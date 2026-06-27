@@ -28,18 +28,13 @@ const session2 = {
    FINAL VOTING (UPDATE EVERY 10 MINUTES)
 ============================================ */
 
-const finalVoting = {
-    "CORTIS": 782788,
-    "LNGSHOT": 764941,
-    "ALPHA DRIVE ONE": 538137,
-    "AHOF": 8960,
-    "KickFlip": 4044,
-    "KEYVITUP": 2556,
-    "YUHZ": 2203,
-    "NEWBEAT": 2152,
-    "MODYSSEY": 1455,
-    "hrtz.wav": 6760
-};
+const finalVoting = {};
+
+data.list.forEach(group => {
+
+    finalVoting[group.name2] = group.total_vote_count;
+
+});
 
 /* ============================================
    BUILD OVERALL TABLE
@@ -174,3 +169,8 @@ const now = new Date();
 
 document.getElementById("updated").textContent =
     "Updated: " + now.toLocaleString();
+
+
+loadVotes();
+
+setInterval(loadVotes,600000);
