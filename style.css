@@ -1,0 +1,251 @@
+/* ===========================
+   GENERAL
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#0F172A;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#fff;
+
+}
+
+.container{
+
+    max-width:450px;
+    margin:30px auto;
+    padding:20px;
+
+}
+
+h1{
+
+    text-align:center;
+    color:#FFD54F;
+    margin-bottom:5px;
+
+}
+
+h3{
+
+    text-align:center;
+    color:#94A3B8;
+    margin-bottom:25px;
+    font-weight:normal;
+
+}
+
+/* ===========================
+   CARD
+=========================== */
+
+.card{
+
+    background:#1E293B;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:18px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.35);
+
+}
+
+.card h2{
+
+    font-size:18px;
+    margin-bottom:18px;
+    color:#CBD5E1;
+
+}
+
+/* ===========================
+   OVERALL TOTAL
+=========================== */
+
+.total{
+
+    text-align:center;
+    font-size:48px;
+    font-weight:bold;
+    color:#00E676;
+
+}
+
+.small{
+
+    text-align:center;
+    margin-top:10px;
+    color:#CBD5E1;
+    font-size:18px;
+
+}
+
+/* ===========================
+   GAP CARD
+=========================== */
+
+.gapCard{
+
+    background:#DC2626;
+    text-align:center;
+
+}
+
+.gapCard h2{
+
+    color:white;
+
+}
+
+.gap{
+
+    font-size:54px;
+    font-weight:bold;
+    color:white;
+
+}
+
+.gapLabel{
+
+    font-size:20px;
+    margin-top:10px;
+
+}
+
+.target{
+
+    margin-top:15px;
+    font-size:18px;
+    color:#FDE68A;
+
+}
+
+/* ===========================
+   ROWS
+=========================== */
+
+.row{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #334155;
+
+}
+
+.row:last-child{
+
+    border-bottom:none;
+
+}
+
+.row span:first-child{
+
+    color:#CBD5E1;
+
+}
+
+.row span:last-child{
+
+    font-weight:bold;
+    font-size:18px;
+
+}
+
+/* ===========================
+   LEADER
+=========================== */
+
+.leader{
+
+    text-align:center;
+    font-size:28px;
+    color:#FFD54F;
+    font-weight:bold;
+
+}
+
+.leaderVotes{
+
+    text-align:center;
+    font-size:36px;
+    margin-top:10px;
+
+}
+
+/* ===========================
+   STATUS COLORS
+=========================== */
+
+.green{
+
+    color:#22C55E;
+
+}
+
+.red{
+
+    color:#EF4444;
+
+}
+
+.orange{
+
+    color:#F59E0B;
+
+}
+
+/* ===========================
+   UPDATED
+=========================== */
+
+.updated{
+
+    text-align:center;
+    color:#94A3B8;
+    margin-top:20px;
+    font-size:14px;
+
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media(max-width:500px){
+
+    .container{
+
+        width:100%;
+        padding:15px;
+
+    }
+
+    .total{
+
+        font-size:40px;
+
+    }
+
+    .gap{
+
+        font-size:42px;
+
+    }
+
+    .leaderVotes{
+
+        font-size:30px;
+
+    }
+
+}
