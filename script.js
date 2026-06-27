@@ -25,10 +25,7 @@ const session2 = {
 async function loadVotes() {
 
 const response = await fetch(
-    "data.json?t=" + Date.now(),
-    {
-        cache: "no-store"
-    }
+  "https://kma-proxy.miacaldira.workers.dev?t=" + Date.now()
 );
 
     const data = await response.json();
