@@ -1,6 +1,6 @@
-/* ===========================================
+/* ===========================
    GENERAL
-=========================================== */
+=========================== */
 
 *{
     margin:0;
@@ -10,443 +10,241 @@
 
 body{
 
-    font-family:
-    Inter,
-    Arial,
-    sans-serif;
-
-    background:#0f172a;
-
+    background:#0F172A;
+    font-family:Arial, Helvetica, sans-serif;
     color:#fff;
-
-    line-height:1.5;
 
 }
 
 .container{
 
-    width:min(100%,520px);
-
-    margin:auto;
-
+    max-width:450px;
+    margin:30px auto;
     padding:20px;
 
 }
 
-/* ===========================================
-   TITLE
-=========================================== */
-
 h1{
 
     text-align:center;
-
-    font-size:2rem;
-
-    margin-bottom:8px;
+    color:#FFD54F;
+    margin-bottom:5px;
 
 }
 
-.subtitle{
+h3{
 
     text-align:center;
-
-    color:#94a3b8;
-
+    color:#94A3B8;
     margin-bottom:25px;
+    font-weight:normal;
 
 }
 
-/* ===========================================
+/* ===========================
    CARD
-=========================================== */
+=========================== */
 
 .card{
 
-    background:#1e293b;
-
-    border-radius:18px;
-
-    padding:18px;
-
+    background:#1E293B;
+    border-radius:16px;
+    padding:20px;
     margin-bottom:18px;
 
-    box-shadow:
-    0 6px 16px rgba(0,0,0,.25);
+    box-shadow:0 4px 12px rgba(0,0,0,.35);
 
 }
 
 .card h2{
 
-    margin-bottom:15px;
-
-    font-size:1.1rem;
+    font-size:18px;
+    margin-bottom:18px;
+    color:#CBD5E1;
 
 }
 
-/* ===========================================
-   BIG NUMBER
-=========================================== */
+/* ===========================
+   OVERALL TOTAL
+=========================== */
 
-.big-number{
-
-    font-size:2.2rem;
-
-    font-weight:700;
+.total{
 
     text-align:center;
-
-    margin:10px 0 20px;
-
-    color:#38bdf8;
-
-}
-
-/* ===========================================
-   RANK BOX
-=========================================== */
-
-.rank-row{
-
-    display:flex;
-
-    gap:12px;
+    font-size:48px;
+    font-weight:bold;
+    color:#00E676;
 
 }
 
-.rank-box{
+.small{
 
-    flex:1;
+    text-align:center;
+    margin-top:10px;
+    color:#CBD5E1;
+    font-size:18px;
 
-    background:#334155;
+}
 
-    border-radius:12px;
+/* ===========================
+   GAP CARD
+=========================== */
 
-    padding:15px;
+.gapCard{
 
+    background:#DC2626;
     text-align:center;
 
 }
 
-.rank-box span{
+.gapCard h2{
 
-    display:block;
-
-    color:#cbd5e1;
-
-    margin-bottom:8px;
+    color:white;
 
 }
 
-.rank-box strong{
+.gap{
 
-    font-size:1.5rem;
-
-}
-
-/* ===========================================
-   BREAKDOWN
-=========================================== */
-
-.stats{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    gap:10px;
+    font-size:54px;
+    font-weight:bold;
+    color:white;
 
 }
 
-.stat{
+.gapLabel{
 
-    flex:1;
-
-    background:#334155;
-
-    border-radius:12px;
-
-    padding:15px;
-
-    text-align:center;
-
-}
-
-.stat span{
-
-    display:block;
-
-    color:#cbd5e1;
-
-    margin-bottom:10px;
-
-}
-
-.stat strong{
-
-    font-size:1.2rem;
-
-}
-
-/* ===========================================
-   GAP
-=========================================== */
-
-.gap-card{
-
-    text-align:center;
-
-}
-
-#gapGoal{
-
+    font-size:20px;
     margin-top:10px;
 
-    color:#facc15;
+}
 
-    font-weight:600;
+.target{
+
+    margin-top:15px;
+    font-size:18px;
+    color:#FDE68A;
 
 }
 
-#status{
+/* ===========================
+   ROWS
+=========================== */
 
-    display:block;
-
-    margin-top:10px;
-
-    color:#cbd5e1;
-
-}
-
-/* ===========================================
-   FILTER BUTTONS
-=========================================== */
-
-.filters{
+.row{
 
     display:flex;
-
-    gap:10px;
-
-    flex-wrap:wrap;
-
-}
-
-.filter{
-
-    flex:1;
-
-    padding:12px;
-
-    border:none;
-
-    border-radius:999px;
-
-    cursor:pointer;
-
-    background:#334155;
-
-    color:white;
-
-    transition:.2s;
-
-    font-size:.95rem;
-
-}
-
-.filter:hover{
-
-    background:#475569;
-
-}
-
-.filter.active{
-
-    background:#0ea5e9;
-
-    color:white;
-
-    font-weight:bold;
-
-}
-
-/* ===========================================
-   TOP 3
-=========================================== */
-
-.top3-card{
-
-    padding:15px;
-
-    border-radius:14px;
-
-    margin-bottom:12px;
-
-    color:white;
-
-}
-
-.gold{
-
-    background:linear-gradient(
-    135deg,
-    #FFD700,
-    #C69200
-    );
-
-    color:#111;
-
-}
-
-.silver{
-
-    background:linear-gradient(
-    135deg,
-    #d1d5db,
-    #9ca3af
-    );
-
-    color:#111;
-
-}
-
-.bronze{
-
-    background:linear-gradient(
-    135deg,
-    #cd7f32,
-    #8b4513
-    );
-
-}
-
-.top3-name{
-
-    font-size:1.2rem;
-
-    font-weight:bold;
-
-}
-
-.top3-votes{
-
-    font-size:1.8rem;
-
-    font-weight:bold;
-
-    margin:8px 0;
-
-}
-
-.top3-gap{
-
-    font-size:.95rem;
-
-}
-
-/* ===========================================
-   LEADERBOARD
-=========================================== */
-
-.rank-item{
-
-    display:flex;
-
     justify-content:space-between;
-
     align-items:center;
 
-    padding:14px;
+    padding:12px 0;
 
     border-bottom:1px solid #334155;
 
 }
 
-.rank-item:last-child{
+.row:last-child{
 
     border-bottom:none;
 
 }
 
-.rank-left{
+.row span:first-child{
 
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
+    color:#CBD5E1;
 
 }
 
-.rank-number{
-
-    width:32px;
-
-    text-align:center;
+.row span:last-child{
 
     font-weight:bold;
-
-    color:#38bdf8;
-
-}
-
-.rank-name{
-
-    font-weight:600;
+    font-size:18px;
 
 }
 
-.rank-votes{
+/* ===========================
+   LEADER
+=========================== */
 
-    font-weight:bold;
-
-    color:#f8fafc;
-
-}
-
-/* ===========================================
-   FOOTER
-=========================================== */
-
-.footer{
+.leader{
 
     text-align:center;
-
-    color:#94a3b8;
-
-    margin:25px 0;
-
-    font-size:.9rem;
+    font-size:28px;
+    color:#FFD54F;
+    font-weight:bold;
 
 }
 
-/* ===========================================
+.leaderVotes{
+
+    text-align:center;
+    font-size:36px;
+    margin-top:10px;
+
+}
+
+/* ===========================
+   STATUS COLORS
+=========================== */
+
+.green{
+
+    color:#22C55E;
+
+}
+
+.red{
+
+    color:#EF4444;
+
+}
+
+.orange{
+
+    color:#F59E0B;
+
+}
+
+/* ===========================
+   UPDATED
+=========================== */
+
+.updated{
+
+    text-align:center;
+    color:#94A3B8;
+    margin-top:20px;
+    font-size:14px;
+
+}
+
+/* ===========================
    MOBILE
-=========================================== */
+=========================== */
 
-@media (max-width:480px){
+@media(max-width:500px){
 
-    .stats{
+    .container{
 
-        flex-direction:column;
-
-    }
-
-    .rank-row{
-
-        flex-direction:column;
+        width:100%;
+        padding:15px;
 
     }
 
-    .filter{
+    .total{
 
-        font-size:.9rem;
+        font-size:40px;
 
     }
 
-    .big-number{
+    .gap{
 
-        font-size:2rem;
+        font-size:42px;
+
+    }
+
+    .leaderVotes{
+
+        font-size:30px;
 
     }
 
