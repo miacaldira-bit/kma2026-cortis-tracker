@@ -168,12 +168,87 @@ const leader = overall[0];
             "🔥 Catch " + leader.name;
 
     }
-
+renderLeaderboard(allGroups, "overall");
     document.getElementById("updated").textContent =
         "Updated: " + new Date().toLocaleString();
 
 }
+/* ===========================================
+   LEADERBOARD
+=========================================== */
 
+function renderLeaderboard(groups, filter) {
+
+    const leaderboard = document.getElementById("leaderboard");
+
+    leaderboard.innerHTML = "";
+
+    const ranking = [...groups].sort((a, b) => {
+
+        switch (filter) {
+
+            case "final":
+                return b.final - a.final;
+
+            case "session1":
+                return b.session1 - a.session1;
+
+            case "session2":
+                return b.session2 - a.session2;
+
+            default:
+                return b.total - a.total;
+
+        }
+
+    });
+
+    ranking.forEach((group, index) => {
+
+        let votes = group.total;
+
+        if (filter === "final")
+            votes = group.final;
+
+        if (filter === "session1")
+            votes = group.session1;
+
+        if (filter === "session2")
+            votes = group.session2;
+
+        let medal = index + 1;
+
+        if (index === 0) medal = "🥇";
+        if (index === 1) medal = "🥈";
+        if (index === 2) medal = "🥉";
+
+        leaderboard.innerHTML += `
+
+        <div class="rank-item">
+
+            <div class="rank-left">
+
+                <div class="rank-number">
+                    ${medal}
+                </div>
+
+                <div class="rank-name">
+                    ${group.name}
+                </div>
+
+            </div>
+
+            <div class="rank-votes">
+                ${votes.toLocaleString()}
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
 /* ===========================================
    START
 =========================================== */
