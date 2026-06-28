@@ -58,41 +58,53 @@ async function loadVotes() {
         finalVoting[group.name2] = group.total_vote_count;
     });
 
-    /* ===========================
-       Build Overall Scores
-    =========================== */
+   /* ===========================
+   Build All Groups
+=========================== */
 
-    const overall = [];
+const allGroups = [];
 
-    ["CORTIS", "LNGSHOT", "ALPHA DRIVE ONE"].forEach(name => {
+data.list.forEach(group => {
 
-        const s1 = session1[name];
-        const s2 = session2[name];
-        const live = finalVoting[name] || 0;
+    const name = group.name2;
 
-        overall.push({
-            name,
-            session1: s1,
-            session2: s2,
-            final: live,
-            total: s1 + s2 + live
-        });
+    const s1 = session1[name] || 0;
+    const s2 = session2[name] || 0;
+    const live = group.total_vote_count;
+
+    allGroups.push({
+
+        name,
+
+        session1: s1,
+
+        session2: s2,
+
+        final: live,
+
+        total: s1 + s2 + live
 
     });
 
-    overall.sort((a, b) => b.total - a.total);
+});
 
-    const liveRanking = [...overall].sort((a, b) => b.final - a.final);
+/* ===========================
+   Rankings
+=========================== */
 
-    const cortis = overall.find(x => x.name === "CORTIS");
+const overall = [...allGroups].sort((a, b) => b.total - a.total);
 
-    const overallRank =
-        overall.findIndex(x => x.name === "CORTIS") + 1;
+const liveRanking = [...allGroups].sort((a, b) => b.final - a.final);
 
-    const liveRank =
-        liveRanking.findIndex(x => x.name === "CORTIS") + 1;
+const cortis = overall.find(x => x.name === "CORTIS");
 
-    const leader = overall[0];
+const overallRank =
+    overall.findIndex(x => x.name === "CORTIS") + 1;
+
+const liveRank =
+    liveRanking.findIndex(x => x.name === "CORTIS") + 1;
+
+const leader = overall[0];
 
     /* ===========================
        Dashboard
