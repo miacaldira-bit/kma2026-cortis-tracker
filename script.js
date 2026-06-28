@@ -169,6 +169,7 @@ const leader = overall[0];
 
     }
 renderLeaderboard(allGroups, currentFilter);
+   renderTop3(allGroups, currentFilter);
    initializeFilters(allGroups);
     document.getElementById("updated").textContent =
         "Updated: " + new Date().toLocaleString();
@@ -179,6 +180,122 @@ renderLeaderboard(allGroups, currentFilter);
 =========================================== */
 
 function renderLeaderboard(groups, filter) {
+   /* ===========================================
+   TOP 3
+=========================================== */
+
+function renderTop3(groups, filter) {
+
+    const container = document.getElementById("top3Container");
+
+    container.innerHTML = "";
+
+    const ranking = [...groups].sort((a, b) => {
+
+        switch (filter) {
+
+            case "final":
+                return b.final - a.final;
+
+            case "session1":
+                return b.session1 - a.session1;
+
+            case "session2":
+                return b.session2 - a.session2;
+
+            default:
+                return b.total - a.total;
+
+        }
+
+    });
+
+    const top3 = ranking.slice(0, 3);
+
+    const classes = ["gold", "silver", "bronze"];
+    const medals = ["🥇", "🥈", "🥉"];
+
+    top3.forEach((group, index) => {
+
+        let votes;
+
+        switch (filter) {
+
+            case "final":
+                votes = group.final;
+                break;
+
+            case "session1":
+                votes = group.session1;
+                break;
+
+            case "session2":
+                votes = group.session2;
+                break;
+
+            default:
+                votes = group.total;
+
+        }
+
+        let gapText = "";
+
+        if (index === 0) {
+
+            const secondVotes =
+                filter === "overall"
+                    ? top3[1].total
+                    : top3[1][filter];
+
+            gapText =
+                "Lead +" +
+                (votes - secondVotes).toLocaleString();
+
+        }
+
+        else {
+
+            const higherVotes =
+                filter === "overall"
+                    ? top3[index - 1].total
+                    : top3[index - 1][filter];
+
+            gapText =
+                "Need " +
+                (higherVotes - votes).toLocaleString();
+
+        }
+
+        container.innerHTML += `
+
+        <div class="top3-card ${classes[index]}">
+
+            <div class="top3-name">
+
+                ${medals[index]} ${group.name}
+
+            </div>
+
+            <div class="top3-votes">
+
+                ${votes.toLocaleString()}
+
+            </div>
+
+            <div class="top3-gap">
+
+                ${gapText}
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+   
 /* ===========================================
    FILTER BUTTONS
 =========================================== */
