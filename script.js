@@ -58,53 +58,41 @@ async function loadVotes() {
         finalVoting[group.name2] = group.total_vote_count;
     });
 
-   /* ===========================
-   Build All Groups
-=========================== */
+    /* ===========================
+       Build Overall Scores
+    =========================== */
 
-const allGroups = [];
+    const overall = [];
 
-data.list.forEach(group => {
+    ["CORTIS", "LNGSHOT", "ALPHA DRIVE ONE"].forEach(name => {
 
-    const name = group.name2;
+        const s1 = session1[name];
+        const s2 = session2[name];
+        const live = finalVoting[name] || 0;
 
-    const s1 = session1[name] || 0;
-    const s2 = session2[name] || 0;
-    const live = group.total_vote_count;
-
-    allGroups.push({
-
-        name,
-
-        session1: s1,
-
-        session2: s2,
-
-        final: live,
-
-        total: s1 + s2 + live
+        overall.push({
+            name,
+            session1: s1,
+            session2: s2,
+            final: live,
+            total: s1 + s2 + live
+        });
 
     });
 
-});
+    overall.sort((a, b) => b.total - a.total);
 
-/* ===========================
-   Rankings
-=========================== */
+    const liveRanking = [...overall].sort((a, b) => b.final - a.final);
 
-const overall = [...allGroups].sort((a, b) => b.total - a.total);
+    const cortis = overall.find(x => x.name === "CORTIS");
 
-const liveRanking = [...allGroups].sort((a, b) => b.final - a.final);
+    const overallRank =
+        overall.findIndex(x => x.name === "CORTIS") + 1;
 
-const cortis = overall.find(x => x.name === "CORTIS");
+    const liveRank =
+        liveRanking.findIndex(x => x.name === "CORTIS") + 1;
 
-const overallRank =
-    overall.findIndex(x => x.name === "CORTIS") + 1;
-
-const liveRank =
-    liveRanking.findIndex(x => x.name === "CORTIS") + 1;
-
-const leader = overall[0];
+    const leader = overall[0];
 
     /* ===========================
        Dashboard
@@ -168,231 +156,12 @@ const leader = overall[0];
             "🔥 Catch " + leader.name;
 
     }
-renderLeaderboard(allGroups, currentFilter);
-   renderTop3(allGroups, currentFilter);
-   initializeFilters(allGroups);
+
     document.getElementById("updated").textContent =
         "Updated: " + new Date().toLocaleString();
 
 }
-/* ===========================================
-   LEADERBOARD
-=========================================== */
 
-function renderLeaderboard(groups, filter) {
-   /* ===========================================
-   TOP 3
-=========================================== */
-
-function renderTop3(groups, filter) {
-
-    const container = document.getElementById("top3Container");
-
-    container.innerHTML = "";
-
-    const ranking = [...groups].sort((a, b) => {
-
-        switch (filter) {
-
-            case "final":
-                return b.final - a.final;
-
-            case "session1":
-                return b.session1 - a.session1;
-
-            case "session2":
-                return b.session2 - a.session2;
-
-            default:
-                return b.total - a.total;
-
-        }
-
-    });
-
-    const top3 = ranking.slice(0, 3);
-
-    const classes = ["gold", "silver", "bronze"];
-    const medals = ["🥇", "🥈", "🥉"];
-
-    top3.forEach((group, index) => {
-
-        let votes;
-
-        switch (filter) {
-
-            case "final":
-                votes = group.final;
-                break;
-
-            case "session1":
-                votes = group.session1;
-                break;
-
-            case "session2":
-                votes = group.session2;
-                break;
-
-            default:
-                votes = group.total;
-
-        }
-
-        let gapText = "";
-
-        if (index === 0) {
-
-            const secondVotes =
-                filter === "overall"
-                    ? top3[1].total
-                    : top3[1][filter];
-
-            gapText =
-                "Lead +" +
-                (votes - secondVotes).toLocaleString();
-
-        }
-
-        else {
-
-            const higherVotes =
-                filter === "overall"
-                    ? top3[index - 1].total
-                    : top3[index - 1][filter];
-
-            gapText =
-                "Need " +
-                (higherVotes - votes).toLocaleString();
-
-        }
-
-        container.innerHTML += `
-
-        <div class="top3-card ${classes[index]}">
-
-            <div class="top3-name">
-
-                ${medals[index]} ${group.name}
-
-            </div>
-
-            <div class="top3-votes">
-
-                ${votes.toLocaleString()}
-
-            </div>
-
-            <div class="top3-gap">
-
-                ${gapText}
-
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-}
-   
-/* ===========================================
-   FILTER BUTTONS
-=========================================== */
-
-function initializeFilters(allGroups) {
-
-    document.querySelectorAll(".filter").forEach(button => {
-
-        button.onclick = () => {
-
-            document
-                .querySelectorAll(".filter")
-                .forEach(btn => btn.classList.remove("active"));
-
-            button.classList.add("active");
-
-            currentFilter = button.dataset.filter;
-
-            renderLeaderboard(allGroups, currentFilter);
-
-            renderTop3(allGroups, currentFilter);
-
-        };
-
-    });
-
-}
-    const leaderboard = document.getElementById("leaderboard");
-
-    leaderboard.innerHTML = "";
-
-    const ranking = [...groups].sort((a, b) => {
-
-        switch (filter) {
-
-            case "final":
-                return b.final - a.final;
-
-            case "session1":
-                return b.session1 - a.session1;
-
-            case "session2":
-                return b.session2 - a.session2;
-
-            default:
-                return b.total - a.total;
-
-        }
-
-    });
-
-    ranking.forEach((group, index) => {
-
-        let votes = group.total;
-
-        if (filter === "final")
-            votes = group.final;
-
-        if (filter === "session1")
-            votes = group.session1;
-
-        if (filter === "session2")
-            votes = group.session2;
-
-        let medal = index + 1;
-
-        if (index === 0) medal = "🥇";
-        if (index === 1) medal = "🥈";
-        if (index === 2) medal = "🥉";
-
-        leaderboard.innerHTML += `
-
-        <div class="rank-item">
-
-            <div class="rank-left">
-
-                <div class="rank-number">
-                    ${medal}
-                </div>
-
-                <div class="rank-name">
-                    ${group.name}
-                </div>
-
-            </div>
-
-            <div class="rank-votes">
-                ${votes.toLocaleString()}
-            </div>
-
-        </div>
-
-        `;
-
-    });
-
-}
 /* ===========================================
    START
 =========================================== */
