@@ -168,7 +168,8 @@ const leader = overall[0];
             "🔥 Catch " + leader.name;
 
     }
-renderLeaderboard(allGroups, "overall");
+renderLeaderboard(allGroups, currentFilter);
+   initializeFilters(allGroups);
     document.getElementById("updated").textContent =
         "Updated: " + new Date().toLocaleString();
 
@@ -178,7 +179,33 @@ renderLeaderboard(allGroups, "overall");
 =========================================== */
 
 function renderLeaderboard(groups, filter) {
+/* ===========================================
+   FILTER BUTTONS
+=========================================== */
 
+function initializeFilters(allGroups) {
+
+    document.querySelectorAll(".filter").forEach(button => {
+
+        button.onclick = () => {
+
+            document
+                .querySelectorAll(".filter")
+                .forEach(btn => btn.classList.remove("active"));
+
+            button.classList.add("active");
+
+            currentFilter = button.dataset.filter;
+
+            renderLeaderboard(allGroups, currentFilter);
+
+            renderTop3(allGroups, currentFilter);
+
+        };
+
+    });
+
+}
     const leaderboard = document.getElementById("leaderboard");
 
     leaderboard.innerHTML = "";
